@@ -1,0 +1,27 @@
+{
+  "name": "Api-orcamento",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev:server": "ts-node-dev --experimental-modules --transpile-only --ignore-watch node_modules  src/server.ts"
+  },
+  "repository": "https://github.com/EderCosta21/Api-or-amento.git",
+  "author": "EderCosta21 <edergonzaga12@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/cors": "^2.8.10",
+    "@types/express": "^4.17.12",
+    "@types/pg": "^8.6.0",
+    "a": "^2.1.2",
+    "add": "^2.0.6",
+    "e": "^0.2.1",
+    "express": "^4.17.1",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.3.5",
+    "yarn": "^1.22.10"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "pg": "^8.6.0"
+  }
+}
