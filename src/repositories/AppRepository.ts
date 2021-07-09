@@ -9,100 +9,141 @@ import { ICreateAppDTO, IUpdateAppDTO } from './DTO';
 import { AppError } from '../errors';
 
 export interface IAppRepository {
-    findById: (id: string) => Promise<IApp>;
+    // findById: (id: string) => Promise<IApp>;
     delete: (id: string) => Promise<void>;
     create: (body: ICreateAppDTO) => Promise<void>;
-    update: (body: IUpdateAppDTO) => Promise<void>;
+    buscaById: (id: string) => Promise<IApp>
+    // update: (body: IUpdateAppDTO) => Promise<void>;
 }
 
-class AppRepository implements IAppRepository{
+class AppRepository implements IAppRepository {
     private postgres: pg.Client | undefined;
 
     constructor() {
     }
 
-    public async create({ nome, versao_android, versao_ios }: ICreateAppDTO): Promise<void> {
+    public async create({ id, valor, }: ICreateAppDTO): Promise<void> {
         this.postgres = new pg.Client(banco.connection);
         this.postgres.connect();
 
         let query = {
             name: 'create-app',
-            text: `INSERT INTO apps (nome, versao_android, versao_ios) VALUES ('${nome}', '${versao_android}', '${versao_ios}')`,
+            text: `INSERT INTO apps (id, valor) VALUES ('${id}', '${valor}')`,
             values: []
         }
 
         try {
             await this.postgres.query(query);
-        } catch(err) {
+        } catch (err) {
             console.log(err);
             throw err;
         } finally {
             this.postgres.end();
         }
     }
-
-
-    public async findById(id: string): Promise<IApp> {
+    //busca por uma conta de energia por ID 
+    public async buscaById(id: string): Promise<IApp> {
         this.postgres = new pg.Client(banco.connection);
         this.postgres.connect();
 
         let query = {
-            name: 'busca-app-por-id',
-            text: `SELECT * FROM apps WHERE id = ${id}`,
+            name: 'busca-by-id',
+            text: `SELECT * FROM Energia WHERE id= ${id}`,
             values: []
         }
-
         try {
-            const app = await this.postgres.query(query);
-
+            const app = await this.postgres.query(query)
             return app.rows[0];
-        } catch(err) {
+        } catch (err) {
             console.log(err);
-            throw new AppError('Erro ao fazer consulta', 500)
-        } finally {
+            throw new AppError('Erro ao fazer consulta ', 500)
+        }
+        finally{
+            //fechar conexão com o banco
             this.postgres.end();
+
         }
     }
 
 
-    public async delete(id: string): Promise<void> {
-        this.postgres = new pg.Client(banco.connection);
-        this.postgres.connect();
+    // public async findById(id: string): Promise<IApp> {
+    //     this.postgres = new pg.Client(banco.connection);
+    //     this.postgres.connect();
 
-        let query = {
-            name: 'deleta-app-por-id',
-            text: `DELeTE FROM apps WHERE id = ${id}`,
-            values: []
-        }
+    //     let query = {
+    //         name: 'busca-app-por-id',
+    //         text: `SELECT * FROM apps WHERE id = ${id}`,
+    //         values: []
+    //     }
 
-        try {
-            await this.postgres.query(query);
-        } catch(err) {
-            throw err;
-        } finally {
-            this.postgres.end();
-        }
+    //     try {
+    //         const app = await this.postgres.query(query);
+
+    //         return app.rows[0];
+    //     } catch(err) {
+    //         console.log(err);
+    //         throw new AppError('Erro ao fazer consulta', 500)
+    //     } finally {
+    //         this.postgres.end();
+    //     }
+    // }
+
+    public async delete (id:string):Promise<void>{
+         this.postgres = new pg.Client(banco.connection);
+         this.postgres.connect();
+         let query ={
+             name:'delete-by-id',
+             text:`DELETE FROM Energia WHERE id = ${id}`
+         }
+         try{
+             await this.postgres.query(query);
+
+         }catch(err){
+             throw err;
+         } finally{
+             this.postgres.end();
+         }
     }
 
-    public async update({ id, nome, versao_android, versao_ios }: IUpdateAppDTO): Promise<void> {
-        this.postgres = new pg.Client(banco.connection);
-        this.postgres.connect();
 
-        let query = {
-            name: 'create-app',
-            text: `UPDATE apps SET nome = '${nome}',  versao_android = '${versao_android}', versao_ios = '${versao_ios}' WHERE id = ${id}`,
-            values: []
-        }
+    // public async delete(id: string): Promise<void> {
+    //     this.postgres = new pg.Client(banco.connection);
+    //     this.postgres.connect();
 
-        try {
-            await this.postgres.query(query);
-        } catch(err) {
-            console.log(err);
-            throw new AppError('Erro ao deletar App', 500)
-        } finally {
-            this.postgres.end();
-        }
-    }
+    //     let query = {
+    //         name: 'deleta-app-por-id',
+    //         text: `DELeTE FROM apps WHERE id = ${id}`,
+    //         values: []
+    //     }
+
+    //     try {
+    //         await this.postgres.query(query);
+    //     } catch(err) {
+    //         throw err;
+    //     } finally {
+    //         this.postgres.end();
+    //     }
+    // }
+
+    // public async update({ id, valor }: IUpdateAppDTO): Promise<void> {
+    //     this.postgres = new pg.Client(banco.connection);
+    //     this.postgres.connect();
+
+    //     let query = {
+    //         name: 'create-app',
+    //         text: `UPDATE apps SET valor = '${valor}', WHERE id = ${id}`,
+    //         values: []
+    //     }
+
+    //     try {
+    //         await this.postgres.query(query);
+    //     } catch(err) {
+    //         console.log(err);
+    //         throw new AppError('Erro ao deletar App', 500)
+    //     } finally {
+    //         this.postgres.end();
+    //     }
+    // }
 
 
 }
