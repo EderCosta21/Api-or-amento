@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "5ed59bab-6abb-46d9-bec2-efe2572c1523",
+		"name": "Api app Orçamento",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Busca por ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3332/app/6",
+					"host": [
+						"localhost"
+					],
+					"port": "3332",
+					"path": [
+						"app",
+						"6"
+					],
+					"query": [
+						{
+							"key": "1",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update por ID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"valor\": 9\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3332/app",
+					"host": [
+						"localhost"
+					],
+					"port": "3332",
+					"path": [
+						"app"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar nova Energia",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \n    \"valor\":80.00\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3332/app/",
+					"host": [
+						"localhost"
+					],
+					"port": "3332",
+					"path": [
+						"app",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar Todos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3332/app/all",
+					"host": [
+						"localhost"
+					],
+					"port": "3332",
+					"path": [
+						"app",
+						"all"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

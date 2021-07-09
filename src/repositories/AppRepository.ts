@@ -9,11 +9,11 @@ import { ICreateAppDTO, IUpdateAppDTO } from './DTO';
 import { AppError } from '../errors';
 
 export interface IAppRepository {
-    // findById: (id: string) => Promise<IApp>;
     delete: (id: string) => Promise<void>;
     create: (body: ICreateAppDTO) => Promise<void>;
     buscaById: (id: string) => Promise<IApp>
-    // update: (body: IUpdateAppDTO) => Promise<void>;
+    buscaAll: () => Promise<IApp[]>
+    update: (body: IUpdateAppDTO) => Promise<void>;
 }
 
 class AppRepository implements IAppRepository {
@@ -22,13 +22,13 @@ class AppRepository implements IAppRepository {
     constructor() {
     }
 
-    public async create({ id, valor, }: ICreateAppDTO): Promise<void> {
+    public async create({  valor, }: ICreateAppDTO): Promise<void> {
         this.postgres = new pg.Client(banco.connection);
         this.postgres.connect();
 
         let query = {
             name: 'create-app',
-            text: `INSERT INTO apps (id, valor) VALUES ('${id}', '${valor}')`,
+            text: `INSERT INTO energia ( valor) VALUES ( '${valor}')`,
             values: []
         }
 
@@ -48,7 +48,7 @@ class AppRepository implements IAppRepository {
 
         let query = {
             name: 'busca-by-id',
-            text: `SELECT * FROM Energia WHERE id= ${id}`,
+            text: `SELECT * FROM energia WHERE id= ${id}`,
             values: []
         }
         try {
@@ -64,6 +64,30 @@ class AppRepository implements IAppRepository {
 
         }
     }
+
+        //busca por uma conta de energia por ID 
+        public async buscaAll(): Promise<IApp[]> {
+            this.postgres = new pg.Client(banco.connection);
+            this.postgres.connect();
+    
+            let query = {
+                name: 'busca-all',
+                text: `SELECT * FROM energia `,
+                values: []
+            }
+            try {
+                const app = await this.postgres.query(query)
+                return app.rows;
+            } catch (err) {
+                console.log(err);
+                throw new AppError('Erro ao fazer consulta ', 500)
+            }
+            finally{
+                //fechar conexão com o banco
+                this.postgres.end();
+    
+            }
+        }
 
 
     // public async findById(id: string): Promise<IApp> {
@@ -125,6 +149,27 @@ class AppRepository implements IAppRepository {
     //     }
     // }
 
+    public async update ({id,valor}:IUpdateAppDTO): Promise<void>
+    {
+
+        this.postgres = new pg.Client(banco.connection);
+        this.postgres.connect();
+
+        let query = {
+            name:' update-app',
+            text: `UPDATE energia SET valor = '${valor}' WHERE id = ${id}`,
+            values:[]
+                }
+
+                try{
+                    await this.postgres.query(query);
+                } catch(err){
+                    console.log(err)
+                    throw new AppError('Erro ao deletar App', 500)
+                } finally{
+                    this.postgres.end();
+                }
+    }
     // public async update({ id, valor }: IUpdateAppDTO): Promise<void> {
     //     this.postgres = new pg.Client(banco.connection);
     //     this.postgres.connect();

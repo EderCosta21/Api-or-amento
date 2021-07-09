@@ -6,7 +6,7 @@ interface Request {
     id: string,
 }
 
-class ShowAppService {
+class GetAllService {
     private appRepository: IAppRepository;
 
     constructor()
@@ -14,15 +14,17 @@ class ShowAppService {
         this.appRepository = new AppRepository();
     }
 
-    public async execute  ({id}:Request): Promise<IApp>
+
+
+    public async execute  (): Promise<IApp[]>
     {
         try {
-            const app = await this.appRepository.buscaById(id);
+            const app = await this.appRepository.buscaAll();
 
-            if(!app)
-            {
-                throw new AppError('Não existe resultado com esse ID', 404)
-            }
+            // if(!app)
+            // {
+            //     throw new AppError('Não existe resultado com esse ID', 404)
+            // }
             return app; 
         } catch ( err)
         {
@@ -30,8 +32,7 @@ class ShowAppService {
         }
     }
 
-   
 
 }
 
-export default ShowAppService;
+export default GetAllService;

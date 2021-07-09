@@ -2,8 +2,7 @@ import AppRepository, { IAppRepository } from '../repositories/AppRepository';
 import { AppError } from '../errors';
 
 interface Request {
-    id: string;
-    valor: string;
+       valor: string;
 
 }
 
@@ -16,17 +15,17 @@ class CreateAppService  {
         this.appRepository = new AppRepository();
     }
 
-    public async execute ({id , valor}: Request ): Promise <void>{
-        if(!id) {
-            throw new AppError('id não informado')
-        }
+    public async execute ({ valor}: Request ): Promise <void>{
+        // if(!id) {
+        //     throw new AppError('id não informado')
+        // }
 
         if(!valor) {
             throw new AppError('valor não informado')
         }
 
         try {
-            await this.appRepository.create({id,valor})
+            await this.appRepository.create({valor})
         }
         catch(err){
             throw new AppError('Erro ao realizar cadastro ', 500)
